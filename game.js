@@ -16,7 +16,11 @@ class Room {
     }
   
     get character() {
-      return this._character
+      return this._character;
+    }
+
+    get item() {
+        return this._item;
     }
   
     set name(value) {
@@ -30,29 +34,20 @@ class Room {
     set character(value) {
       this._character = value;
     }
+
+    set item(value) {
+        this._item = value;
+    }
   
-    /**
-     * a method to produce friendly room description
-     * @returns {string} description of the room
-     */
+
     describe() {
       return `You are in the ${this._name}. ${this._description}.`;
     }
   
-    /**
-    * a method to add rooms to link rooms to this one
-    * it does this by adding them to _linkedRooms
-    * @param {string} direction the direction the other room is from this one
-    * @param {object} roomToLink the room that is in that direction
-    */
     linkRoom(direction, roomToLink) {
       this._linkedRooms[direction] = roomToLink;
     }
   
-    /**
-     * a method to produce friendly description of linked rooms
-     * @returns {array} descriptions of what rooms are in which direction
-     */
     getDetails() {
       const entries = Object.entries(this._linkedRooms);
       let details = []
@@ -63,12 +58,6 @@ class Room {
       return details;
     }
   
-    /**
-     * a method to move the adventurer to a new room
-     * @param {string} direction the direction in which to move
-     * @returns {object} the room moved to 
-     */
-    //method to move to a new room
     move(direction) {
       if (direction in this._linkedRooms) {
         return this._linkedRooms[direction];
@@ -102,13 +91,6 @@ class Item {
       return this._description;
     }
   
-    /**
-     * a method to produce friendly item description
-     * 
-     * @returns {string} description of the item
-     * @author Neil Bizzell
-     * @version 1.0
-     */
     describe() {
       return `You found a ${this._name}. This ${this._description}`;
     }
@@ -119,8 +101,9 @@ class Item {
 class Character {
     constructor(name) {
         this._name = name,
-        this._description = ""
-        this._conversation = ""
+        this._description = "",
+        this._conversation = "",
+        this._item = ""
     }
 
     set name(value) {
@@ -135,6 +118,10 @@ class Character {
       this._conversation = value;
     }
 
+    set item(value) {
+        this._item = value;
+    }
+
     get name() {
       return this._name;
     }
@@ -146,24 +133,14 @@ class Character {
     get conversation() {
       return this._conversation;
     }
-    /**
-     * a method to produce friendly character description
-     * 
-     * @returns {string} description of the character
-     * @author Neil Bizzell
-     * @version 1.0
-     */
+
+    get items() {
+        return this._item;
+    }
     describe() {
       return `You have found ${this._name}.`;
     }
   
-    /**
-     * a method to produce friendly conversation text
-     * 
-     * @returns {string} the conversation text
-     * @author Neil Bizzell
-     * @version 1.0
-     */
     converse() {
       return this._conversation;
     }
@@ -207,7 +184,6 @@ GuestBedroom.linkRoom("north", GamesRoom);
 GuestBedroom.linkRoom("west", Parlour);
 
 // Add room descriptions
-
 Kitchen.description("There's empty bottles and rubbish everywhere.");
 Hall.description("There's explicit graffiti all over the walls. To the north you can see outside.");
 LivingRoom.description("Sleeping bodies are piled among the debris of last night.");
@@ -218,6 +194,45 @@ MasterBedroom.description("The mattress is hanging out of the window.")
 Parlour.description("Looks like it might have survived the damage.")
 GuestBedroom.description("There are clothes everywhere.")
 
+// Create characters
+const Dave = new Character("Dave");
+const Greg = new Character("Greg");
+const Jenny = new Character("Jenny");
+
+// Add characters to rooms
+LivingRoom.character(Greg);
+Bathroom.character(Dave);
+MasterBedroom.character(Jenny);
+
+// Create character descriptions
+Dave.description("Dave is throwing up in the toilet. He appears to be wearing your trousers")
+Greg.description("Greg is wearing sunglasses and nothing else.")
+Jenny.description("Jenny is lying on top of the mattress.")
+
+// Create character dialogue
+Dave.conversation("Find me my trousers and I'll give you yours back.")
+Greg.conversation("Yeah I've got your phone. I was trying to order a kebab. Find me one and I'll give you your phone back")
+Jenny.conversation("I know where your wallet is, but I'm dying. I need water. Get me some and I'll tell you where your wallet")
+
+// Create items
+const Phone = new Item("phone");
+const YourTrousers = new Item("your trousers");
+const Kebab = new Item("kebab");
+const Beer = new Item("beer");
+const Water = new Item("water");
+const Wallet = new Item("wallet");
+const DavesTrousers = new Item("Dave's trousers");
+
+// Assign items to characters
+Greg.item(Phone);
+Dave.item(YourTrousers);
+Jenny.item(Wallet);
+
+// Assign other items to rooms
+DiningRoom.item(Kebab);
+Kitchen.item(Beer);
+GamesRoom.item(Water)
+GuestBedroom.item(DavesTrousers);
 
 // Start Game
 function startGame() {
