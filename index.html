@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="h-screen w-screen pt-10 bg-[url('background.jpg')]">
+    <div id="game-container" class="h-[90%] w-4/5 mx-auto flex flex-col gap-5 p-5 bg-orange-100 opacity-90 rounded-[12px]">
+        <div id="text-status-container" class="flex h-[65%] w-full gap-5">
+            <div id="text-box" class="border h-full w-[65%] border-black rounded-[12px] flex justify-center items-center">
+                <p id="text-area" class="h-[90%] w-[90%]"></p>
+            </div>
+            <div id="status" class="h-full w-[35%] border-black rounded-[12px] flex flex-col gap-2">
+                <div id="health" class="border border-black rounded-[12px] w-full h-1/2 flex justify-center">
+                    <h1 class="heading pt-2">Health</h1>
+                </div>
+                <div id="items" class="border border-black rounded-[12px] w-full h-1/2 flex justify-center">
+                    <h1 class="heading pt-2">Items</h1>
+                </div>
+            </div>
+        </div>
+        <div id="actions" class="border h-[35%] w-full border-black rounded-[12px] flex justify-center items-center">
+            <p id="actions-text-area" class="h-[90%] w-[90%]"></p>
+        </div>
+    </div>
+</body>
+</html>
