@@ -1,0 +1,171 @@
+class Room {
+    constructor(name) {
+      this._name = name;
+      this._description = "";
+      this._linkedRooms = {};
+      this._character = "";
+      this._item = "";
+    }
+  
+    get name() {
+      return this._name;
+    }
+  
+    get description() {
+      return this._description;
+    }
+  
+    get character() {
+      return this._character
+    }
+  
+    set name(value) {
+      this._name = value;
+    }
+  
+    set description(value) {
+      this._description = value;
+    }
+  
+    set character(value) {
+      this._character = value;
+    }
+  
+    /**
+     * a method to produce friendly room description
+     * @returns {string} description of the room
+     */
+    describe() {
+      return `You look around the ${this._name} and you can see ${this._description}`;
+    }
+  
+    /**
+    * a method to add rooms to link rooms to this one
+    * it does this by adding them to _linkedRooms
+    * @param {string} direction the direction the other room is from this one
+    * @param {object} roomToLink the room that is in that direction
+    */
+    linkRoom(direction, roomToLink) {
+      this._linkedRooms[direction] = roomToLink;
+    }
+  
+    /**
+     * a method to produce friendly description of linked rooms
+     * @returns {array} descriptions of what rooms are in which direction
+     */
+    getDetails() {
+      const entries = Object.entries(this._linkedRooms);
+      let details = []
+      for (const [direction, room] of entries) {
+        let text = `The ${room._name} is to the ${direction}`;
+        details.push(text);
+      }
+      return details;
+    }
+  
+    /**
+     * a method to move the adventurer to a new room
+     * @param {string} direction the direction in which to move
+     * @returns {object} the room moved to 
+     */
+    //method to move to a new room
+    move(direction) {
+      if (direction in this._linkedRooms) {
+        return this._linkedRooms[direction];
+      } else {
+        alert("You can't go that way",);
+        alert(`You are still in the ${this._name}`)
+        return this;
+      }
+    }
+  }
+
+class Item {
+    constructor(name) {
+        this._name = name,
+        this._description = ""
+    }
+  
+    set name(value) {
+      this._name = value;
+    }
+  
+    set description(value) {
+      this._description = value;
+    }
+  
+    get name() {
+      return this._name;
+    }
+  
+    get description() {
+      return this._description;
+    }
+  
+    /**
+     * a method to produce friendly item description
+     * 
+     * @returns {string} description of the item
+     * @author Neil Bizzell
+     * @version 1.0
+     */
+    describe() {
+      return `You found a ${this._name}. This ${this._description}`;
+    }
+  
+  
+  }
+  
+class Character {
+    constructor(name) {
+        this._name = name,
+        this._description = ""
+        this._conversation = ""
+    }
+
+    set name(value) {
+      this._name = value;
+    }
+  
+    set description(value) {
+      this._description = value;
+    }
+  
+    set conversation(value) {
+      this._conversation = value;
+    }
+
+    get name() {
+      return this._name;
+    }
+  
+    get description() {
+      return this._description;
+    }
+  
+    get conversation() {
+      return this._conversation;
+    }
+    /**
+     * a method to produce friendly character description
+     * 
+     * @returns {string} description of the character
+     * @author Neil Bizzell
+     * @version 1.0
+     */
+    describe() {
+      return `You have found ${this._name}.`;
+    }
+  
+    /**
+     * a method to produce friendly conversation text
+     * 
+     * @returns {string} the conversation text
+     * @author Neil Bizzell
+     * @version 1.0
+     */
+    converse() {
+      return this._conversation;
+    }
+  }
+  
