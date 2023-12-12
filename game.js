@@ -1,3 +1,4 @@
+// Room Class
 class Room {
     constructor(name) {
       this._name = name;
@@ -69,35 +70,28 @@ class Room {
     }
   }
 
+// Item Class
+
 class Item {
     constructor(name) {
-        this._name = name,
-        this._description = ""
+        this._name = name
     }
   
     set name(value) {
       this._name = value;
     }
   
-    set description(value) {
-      this._description = value;
-    }
-  
     get name() {
       return this._name;
     }
   
-    get description() {
-      return this._description;
-    }
-  
     describe() {
-      return `You found a ${this._name}. This ${this._description}`;
+      return `You found a ${this._name}.`;
     }
-  
-  
   }
-  
+
+// Character Class
+
 class Character {
     constructor(name) {
         this._name = name,
@@ -145,7 +139,7 @@ class Character {
       return this._conversation;
     }
   }
-  
+
 // Rooms
 const Kitchen = new Room("kitchen");
 const Hall = new Room("hall");
@@ -184,15 +178,15 @@ GuestBedroom.linkRoom("north", GamesRoom);
 GuestBedroom.linkRoom("west", Parlour);
 
 // Add room descriptions
-Kitchen.description("There's empty bottles and rubbish everywhere.");
-Hall.description("There's explicit graffiti all over the walls. To the north you can see outside.");
-LivingRoom.description("Sleeping bodies are piled among the debris of last night.");
-Bathroom.description("Jesus! It stinks in here!");
-DiningRoom.description("Hard to see anything beyond the piles of takeaway boxes.")
-GamesRoom.description("A drunk man is passed out on the pool table.")
-MasterBedroom.description("The mattress is hanging out of the window.")
-Parlour.description("Looks like it might have survived the damage.")
-GuestBedroom.description("There are clothes everywhere.")
+Kitchen.description = "There's empty bottles and rubbish everywhere"
+Hall.description = "There's explicit graffiti all over the walls. To the north you can see outside."
+LivingRoom.description = "Sleeping bodies are piled among the debris of last night."
+Bathroom.description = "Jesus! It stinks in here!"
+DiningRoom.description = "Hard to see anything beyond the piles of takeaway boxes."
+GamesRoom.description = "A drunk man is passed out on the pool table."
+MasterBedroom.description = "The mattress is hanging out of the window."
+Parlour.description = "Looks like it might have survived the damage."
+GuestBedroom.description = "There are clothes everywhere."
 
 // Create characters
 const Dave = new Character("Dave");
@@ -200,19 +194,19 @@ const Greg = new Character("Greg");
 const Jenny = new Character("Jenny");
 
 // Add characters to rooms
-LivingRoom.character(Greg);
-Bathroom.character(Dave);
-MasterBedroom.character(Jenny);
+LivingRoom.character = Greg
+Bathroom.character = Dave
+MasterBedroom.character = Jenny
 
 // Create character descriptions
-Dave.description("Dave is throwing up in the toilet. He appears to be wearing your trousers")
-Greg.description("Greg is wearing sunglasses and nothing else.")
-Jenny.description("Jenny is lying on top of the mattress.")
+Dave.description = "Dave is throwing up in the toilet. He appears to be wearing your trousers."
+Greg.description = "Greg is wearing sunglasses and nothing else."
+Jenny.description = "Jenny is lying on top of the mattress."
 
 // Create character dialogue
-Dave.conversation("Find me my trousers and I'll give you yours back.")
-Greg.conversation("Yeah I've got your phone. I was trying to order a kebab. Find me one and I'll give you your phone back")
-Jenny.conversation("I know where your wallet is, but I'm dying. I need water. Get me some and I'll tell you where your wallet")
+Dave.conversation = "Find me my trousers and I'll give you yours back."
+Greg.conversation = "Yeah I've got your phone. I was trying to order a kebab. Find me one and I'll give you your phone back"
+Jenny.conversation = "I know where your wallet is, but I'm dying. I need water. Get me some and I'll tell you where your wallet"
 
 // Create items
 const Phone = new Item("phone");
@@ -224,35 +218,60 @@ const Wallet = new Item("wallet");
 const DavesTrousers = new Item("Dave's trousers");
 
 // Assign items to characters
-Greg.item(Phone);
-Dave.item(YourTrousers);
-Jenny.item(Wallet);
+Greg.item = Phone
+Dave.item = YourTrousers
+Jenny.item = Wallet
 
 // Assign other items to rooms
-DiningRoom.item(Kebab);
-Kitchen.item(Beer);
-GamesRoom.item(Water)
-GuestBedroom.item(DavesTrousers);
+DiningRoom.item = Kebab
+Kitchen.item = Beer
+GamesRoom.item = Water
+GuestBedroom.item = DavesTrousers
+
+const startPage = document.getElementById('start-page');
+const gamePage = document.getElementById('game-container');
+
+// Display room info
+function displayRoomInfo(room) {
+    if (room.character === "") {
+        textContent = `You are in the ${room.name}. ${room.description}.`
+    } else {
+        textContent = `You are in the ${room.name}. ${room.description}. ${room.character} is here. ${room.character} is ${room.character.description}`
+    }
+
+    document.getElementById("text-area").innerHTML = textContent;
+    document.getElementById("usertext").focus();
+}
+
 
 // Start Game
 function startGame() {
-    currentRoom = Kitchen;
-    displayRoomInfo(currentRoom);
-}
+    startPage.classList.add('hidden');
+    gamePage.classList.remove('hidden');
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        document.getElementById("text-area").innerHTML = "";
+        document.getElementById("text-area").innerHTML = '"God, where am I? I don\'t feel so good... I can\'t remember a thing from last night..."<br><br>"Hold on a second. Where\'s my phone? And my wallet. And... my trousers??"';
+      } else {
+          console.log("that is not a valid command please try again");
+      }
+    });
+  }
+// 
 
 // Handle commands
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      command = document.getElementById("usertext").value;
-      const directions = ["north", "south", "east", "west"]
-      if (directions.includes(command.toLowerCase())) {
-        currentRoom = currentRoom.move(command)
-        document.getElementById("usertext").value = ""
-        displayRoomInfo(currentRoom);
-      } else {
-        document.getElementById("usertext").value = ""
-        alert("that is not a valid command please try again")
-      }
+// document.addEventListener("keydown", function (event) {
+//     if (event.key === "Enter") {
+//       command = document.getElementById("usertext").value;
+//       const directions = ["north", "south", "east", "west"]
+//       if (directions.includes(command.toLowerCase())) {
+//         currentRoom = currentRoom.move(command)
+//         document.getElementById("usertext").value = ""
+//         displayRoomInfo(currentRoom);
+//       } else {
+//         document.getElementById("usertext").value = ""
+//         alert("that is not a valid command please try again")
+//       }
 
-    }
-  });
+//     }
+//   });
