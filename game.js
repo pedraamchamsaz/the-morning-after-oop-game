@@ -36,7 +36,7 @@ class Room {
      * @returns {string} description of the room
      */
     describe() {
-      return `You look around the ${this._name} and you can see ${this._description}`;
+      return `You are in the ${this._name}. ${this._description}.`;
     }
   
     /**
@@ -205,3 +205,39 @@ Parlour.linkRoom("north", Kitchen);
 Parlour.linkRoom("east", GuestBedroom);
 GuestBedroom.linkRoom("north", GamesRoom);
 GuestBedroom.linkRoom("west", Parlour);
+
+// Add room descriptions
+
+Kitchen.description("There's empty bottles and rubbish everywhere.");
+Hall.description("There's explicit graffiti all over the walls. To the north you can see outside.");
+LivingRoom.description("Sleeping bodies are piled among the debris of last night.");
+Bathroom.description("Jesus! It stinks in here!");
+DiningRoom.description("Hard to see anything beyond the piles of takeaway boxes.")
+GamesRoom.description("A drunk man is passed out on the pool table.")
+MasterBedroom.description("The mattress is hanging out of the window.")
+Parlour.description("Looks like it might have survived the damage.")
+GuestBedroom.description("There are clothes everywhere.")
+
+
+// Start Game
+function startGame() {
+    currentRoom = Kitchen;
+    displayRoomInfo(currentRoom);
+}
+
+// Handle commands
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      command = document.getElementById("usertext").value;
+      const directions = ["north", "south", "east", "west"]
+      if (directions.includes(command.toLowerCase())) {
+        currentRoom = currentRoom.move(command)
+        document.getElementById("usertext").value = ""
+        displayRoomInfo(currentRoom);
+      } else {
+        document.getElementById("usertext").value = ""
+        alert("that is not a valid command please try again")
+      }
+
+    }
+  });
