@@ -1,4 +1,9 @@
+body {
+    font-family: "Press Start 2P";   
+}
+
 .heading {
     font-family: "Press Start 2P";
     font-size: small;
+    font-weight: bold;
 }
