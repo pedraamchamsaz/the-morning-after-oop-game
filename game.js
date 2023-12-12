@@ -169,3 +169,39 @@ class Character {
     }
   }
   
+// Rooms
+const Kitchen = new Room("kitchen");
+const Hall = new Room("hall");
+const LivingRoom = new Room("living room");
+const Bathroom = new Room("bathroom");
+const DiningRoom = new Room("dining room");
+const GamesRoom = new Room("games room");
+const MasterBedroom = new Room("master bedroom");
+const Parlour = new Room("parlour");
+const GuestBedroom = new Room("guest bedroom");
+
+// Link rooms
+Kitchen.linkRoom("north", Hall);
+Kitchen.linkRoom("south", Parlour);
+Kitchen.linkRoom("east", GamesRoom);
+Kitchen.linkRoom("west", DiningRoom);
+LivingRoom.linkRoom("east", Hall);
+LivingRoom.linkRoom("south", DiningRoom);
+Hall.linkRoom("south", Kitchen);
+Hall.linkRoom("west", LivingRoom);
+Hall.linkRoom("east", Bathroom);
+Bathroom.linkRoom("west", Hall);
+Bathroom.linkRoom("south", GamesRoom);
+GamesRoom.linkRoom("north", Bathroom);
+GamesRoom.linkRoom("west", Kitchen);
+GamesRoom.linkRoom("south", GuestBedroom);
+DiningRoom.linkRoom("north", LivingRoom);
+DiningRoom.linkRoom("east", Kitchen);
+DiningRoom.linkRoom("south", MasterBedroom);
+MasterBedroom.linkRoom("north", DiningRoom);
+MasterBedroom.linkRoom("east", Parlour);
+Parlour.linkRoom("west", MasterBedroom);
+Parlour.linkRoom("north", Kitchen);
+Parlour.linkRoom("east", GuestBedroom);
+GuestBedroom.linkRoom("north", GamesRoom);
+GuestBedroom.linkRoom("west", Parlour);
