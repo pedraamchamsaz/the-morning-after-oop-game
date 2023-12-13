@@ -22,12 +22,20 @@
                 <input id="usertext" type="text" class="border border-black rounded-lg mb-3">
             </div>
             <div id="status" class="h-full w-[35%] border-black rounded-[12px] flex flex-col gap-2">
-                <div id="health" class="border border-black rounded-[12px] w-full h-1/2 flex flex-col items-center">
+                <div id="health-bar" class="border border-black rounded-[12px] w-full h-1/2 flex flex-col items-center">
                     <h1 class="heading pt-2">Health</h1>
-                    <p class="mt-8 text-4xl">100</p>
+                    <p id="health-score" class="mt-8 text-4xl">100</p>
                 </div>
-                <div id="items" class="border border-black rounded-[12px] w-full h-1/2 flex justify-center">
+                <div id="items" class="border border-black rounded-[12px] w-full h-1/2 flex flex-col items-center">
                     <h1 class="heading pt-2">Items</h1>
+                    <ul id="items-list">
+                        <li id="item1"></li>
+                        <li id="item2"></li>
+                        <li id="item3"></li>
+                        <li id="item4"></li>
+                        <li id="item5"></li>
+                        <li id="item6"></li>
+                    </ul>
                 </div>
             </div>
         </div>

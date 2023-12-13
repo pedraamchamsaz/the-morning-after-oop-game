@@ -179,14 +179,14 @@ GuestBedroom.linkRoom("west", Parlour);
 
 // Add room descriptions
 Kitchen.description = "There's empty bottles and rubbish everywhere"
-Hall.description = "There's explicit graffiti all over the walls. To the north you can see outside."
-LivingRoom.description = "Sleeping bodies are piled among the debris of last night."
+Hall.description = "There's graffiti all over the walls. To the north you can see outside"
+LivingRoom.description = "Sleeping bodies are piled among the debris of last night"
 Bathroom.description = "Jesus! It stinks in here!"
-DiningRoom.description = "Hard to see anything beyond the piles of takeaway boxes."
-GamesRoom.description = "A drunk man is passed out on the pool table."
-MasterBedroom.description = "The mattress is hanging out of the window."
-Parlour.description = "Looks like it might have survived the damage."
-GuestBedroom.description = "There are clothes everywhere."
+DiningRoom.description = "Hard to see anything beyond the piles of takeaway boxes"
+GamesRoom.description = "A drunk man is passed out on the pool table"
+MasterBedroom.description = "The mattress is hanging out of the window"
+Parlour.description = "Looks like it might have survived the damage"
+GuestBedroom.description = "There are clothes everywhere"
 
 // Create characters
 const Dave = new Character("Dave");
@@ -236,42 +236,71 @@ function displayRoomInfo(room) {
     if (room.character === "") {
         textContent = `You are in the ${room.name}. ${room.description}.`
     } else {
-        textContent = `You are in the ${room.name}. ${room.description}. ${room.character} is here. ${room.character} is ${room.character.description}`
+        textContent = `You are in the ${room.name}. ${room.description}. ${room.character.name} is here. ${room.character.description}`
     }
 
     document.getElementById("text-area").innerHTML = textContent;
     document.getElementById("usertext").focus();
 }
 
+let currentRoom = {};
 
 // Start Game
 function startGame() {
-    startPage.classList.add('hidden');
-    gamePage.classList.remove('hidden');
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Enter") {
-        document.getElementById("text-area").innerHTML = "";
-        document.getElementById("text-area").innerHTML = '"God, where am I? I don\'t feel so good... I can\'t remember a thing from last night..."<br><br>"Hold on a second. Where\'s my phone? And my wallet. And... my trousers??"';
-      } else {
-          console.log("that is not a valid command please try again");
+  let pageNumber = 1;
+  currentRoom = Kitchen;
+  startPage.classList.add('hidden');
+  gamePage.classList.remove('hidden');
+  document.addEventListener("keydown", function (event) {
+    if (event.key === " ") {
+      let textArea = document.getElementById("text-area");
+      if (pageNumber === 1) {
+        textArea.innerHTML = '"God, where am I? I don\'t feel so good... I can\'t remember a thing from last night..."<br><br>"Hold on a second. Where\'s my phone? And my wallet. And... my trousers??"';
+      } else if (pageNumber === 2) {
+        textArea.innerHTML = "The aim of the game is to search Dave's house and find Harry's phone, wallet and trousers before his hangover gets the better of him. Every time you take an action, Harry's health will drop.<br><br>To move, type a direction into the input box and hit Enter. To search a room for items, type Search.<br><br> Best of luck!";
+      } else if (pageNumber === 3) {
+        firstRoom()
       }
-    });
-  }
+
+      pageNumber++;
+    } else {
+        console.log("that is not a valid command please try again 2");
+    }
+  });
+}
 // 
 
-// Handle commands
-// document.addEventListener("keydown", function (event) {
-//     if (event.key === "Enter") {
-//       command = document.getElementById("usertext").value;
-//       const directions = ["north", "south", "east", "west"]
-//       if (directions.includes(command.toLowerCase())) {
-//         currentRoom = currentRoom.move(command)
-//         document.getElementById("usertext").value = ""
-//         displayRoomInfo(currentRoom);
-//       } else {
-//         document.getElementById("usertext").value = ""
-//         alert("that is not a valid command please try again")
-//       }
+function firstRoom() {
+  displayRoomInfo(Kitchen)
+}
 
-//     }
-//   });
+// let itemBag = []
+
+// for (let i = 0; i < 7; i++) {
+//   document.getElementById("item" + String.i).innerHTML = itemBag[i]
+// }
+
+let health = 100;
+
+// Handle commands
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      command = document.getElementById("usertext").value;
+      const directions = ["north", "south", "east", "west"]
+      if (directions.includes(command.toLowerCase())) {
+        currentRoom = currentRoom.move(command)
+        document.getElementById("usertext").value = ""
+        displayRoomInfo(currentRoom);
+        health -= 5
+        document.getElementById("health-score").innerHTML = health
+        if (health === 0) {
+          alert("GAME OVER. Harry died from his hangover")
+          this.location.reload()
+        }
+      } 
+      else {
+        document.getElementById("usertext").value = ""
+        alert("that is not a valid command please try again")
+      }
+    }
+  });
