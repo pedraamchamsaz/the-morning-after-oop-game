@@ -168,6 +168,7 @@ const GamesRoom = new Room("games room");
 const MasterBedroom = new Room("master bedroom");
 const Parlour = new Room("parlour");
 const GuestBedroom = new Room("guest bedroom");
+const Garden = new Room("garden")
 
 // Link rooms
 Kitchen.linkRoom("north", Hall);
@@ -179,6 +180,8 @@ LivingRoom.linkRoom("south", DiningRoom);
 Hall.linkRoom("south", Kitchen);
 Hall.linkRoom("west", LivingRoom);
 Hall.linkRoom("east", Bathroom);
+Hall.linkRoom("north", Garden);
+Garden.linkRoom("south", Hall);
 Bathroom.linkRoom("west", Hall);
 Bathroom.linkRoom("south", GamesRoom);
 GamesRoom.linkRoom("north", Bathroom);
@@ -205,6 +208,7 @@ GamesRoom.description = "A drunk man is passed out on the pool table"
 MasterBedroom.description = "The mattress is hanging out of the window"
 Parlour.description = "Looks like it might have survived the damage"
 GuestBedroom.description = "There are clothes everywhere"
+Garden.description = "The smell of freedom... home... but not until you find your stuff"
 
 // Create characters
 const Dave = new Character("Dave");
@@ -318,7 +322,12 @@ function updateItemsList() {
   itemsListElement.innerHTML = foundItems.join("<br>")
 
 if (foundItems.includes("Phone") && foundItems.includes("Wallet") && foundItems.includes("Your Trousers")) {
-  alert("YOU WON. Harry managed to call an Uber and made it home")
+  setTimeout(function() {
+    alert("YOU WON. Harry managed to escape the house and call an Uber home");
+  }, 2000);
+  setTimeout(function() {
+    location.reload();
+  }, 3000);
 }
 }
 
