@@ -18,7 +18,7 @@
     <div id="game-container" class="hidden h-[90%] w-4/5 mx-auto flex flex-col gap-5 p-5 bg-orange-100 opacity-90 rounded-[12px]">
         <div id="text-status-container" class="flex h-[65%] w-full gap-5">
             <div id="text-box" class="border h-full w-[65%] border-black rounded-[12px] flex flex-col justify-center items-center">
-                <p id="text-area" class="h-[90%] w-[90%] text-xs p-5 text-center leading-5">It's 7am on Sunday morning. Harry has just woken up at Dave's house after Dave's Christmas party. He had a few too many last night. He needs to get home, but he's missing a few key items.<br><br> The aim of the game is to find these items so Harry can make his way home. But holy f**k does he feel rough! Will you help him find everything before his energy runs out?</p>
+                <p id="text-area" class="h-[90%] w-[90%] text-xs p-5 text-center leading-5">7am, Dave’s house, the morning after his annual Xmas party. We see the remnants of a night of chaos and insanity. A sea of empty beer bottles, pizza boxes and drunken corpses. Outside, a mattress in flames and a car flipped on its back.<br><br>In the kitchen, amidst this wreckage, someone stirs. It’s Harry.</p>
                 <input id="usertext" type="text" class="border border-black rounded-lg mb-3">
             </div>
             <div id="status" class="h-full w-[35%] border-black rounded-[12px] flex flex-col gap-2">
@@ -26,20 +26,13 @@
                     <h1 class="heading pt-2">Health</h1>
                     <p id="health-score" class="mt-8 text-4xl">100</p>
                 </div>
-                <div id="items" class="border border-black rounded-[12px] w-full h-1/2 flex flex-col items-center">
-                    <h1 class="heading pt-2">Items</h1>
-                    <ul id="items-list">
-                        <li id="item1"></li>
-                        <li id="item2"></li>
-                        <li id="item3"></li>
-                        <li id="item4"></li>
-                        <li id="item5"></li>
-                        <li id="item6"></li>
-                    </ul>
+                <div id="items" class="border border-black rounded-[12px] w-full h-1/2">
+                    <h1 class="heading pt-2 block text-center">Items</h1>
+                    <div id="items-list" class="text-xs mt-2 block ml-5"></div>
                 </div>
             </div>
         </div>
-        <div id="actions" class="border h-[35%] w-full border-black rounded-[12px] flex justify-center items-center">
+        <div id="actions" class="border h-[35%] w-full border-black rounded-[12px] flex justify-center items-center text-center text-sm px-10">
             <p id="actions-text-area" class="h-[90%] w-[90%]"></p>
         </div>
     </div>

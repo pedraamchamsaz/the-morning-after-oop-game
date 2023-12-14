@@ -6,6 +6,7 @@ class Room {
       this._linkedRooms = {};
       this._character = "";
       this._item = "";
+      this._visits = 0;
     }
   
     get name() {
@@ -22,6 +23,10 @@ class Room {
 
     get item() {
         return this._item;
+    }
+
+    get visits() {
+      return this._visits;
     }
   
     set name(value) {
@@ -40,6 +45,9 @@ class Room {
         this._item = value;
     }
   
+    set visits(value) {
+      this._visits = value;
+    }
 
     describe() {
       return `You are in the ${this._name}. ${this._description}.`;
@@ -86,7 +94,7 @@ class Item {
     }
   
     describe() {
-      return `You found a ${this._name}.`;
+      return `You found a ${this._name}!`;
     }
   }
 
@@ -98,6 +106,7 @@ class Character {
         this._description = "",
         this._conversation = "",
         this._item = ""
+        this._itemConvo = ""
     }
 
     set name(value) {
@@ -116,6 +125,10 @@ class Character {
         this._item = value;
     }
 
+    set itemConvo(value) {
+      this._itemConvo = value;
+    }
+
     get name() {
       return this._name;
     }
@@ -131,8 +144,13 @@ class Character {
     get items() {
         return this._item;
     }
+
+    get itemConvo() {
+      return this._itemConvo;
+    }
+
     describe() {
-      return `You have found ${this._name}.`;
+      return `You found ${this._name}.`;
     }
   
     converse() {
@@ -179,7 +197,7 @@ GuestBedroom.linkRoom("west", Parlour);
 
 // Add room descriptions
 Kitchen.description = "There's empty bottles and rubbish everywhere"
-Hall.description = "There's graffiti all over the walls. To the north you can see outside"
+Hall.description = "There's graffiti all over the walls. To the north you can see outside, <u>freedom<u>"
 LivingRoom.description = "Sleeping bodies are piled among the debris of last night"
 Bathroom.description = "Jesus! It stinks in here!"
 DiningRoom.description = "Hard to see anything beyond the piles of takeaway boxes"
@@ -204,17 +222,21 @@ Greg.description = "Greg is wearing sunglasses and nothing else."
 Jenny.description = "Jenny is lying on top of the mattress."
 
 // Create character dialogue
-Dave.conversation = "Find me my trousers and I'll give you yours back."
-Greg.conversation = "Yeah I've got your phone. I was trying to order a kebab. Find me one and I'll give you your phone back"
-Jenny.conversation = "I know where your wallet is, but I'm dying. I need water. Get me some and I'll tell you where your wallet"
+Dave.conversation = 'Dave: "Bleugh... find me my trousers... bleugh... and I\'ll give you yours back."'
+Greg.conversation = 'Greg: "Yeah I\'ve got your phone. I was trying to order a kebab. Find me one and I\'ll give you your phone back"'
+Jenny.conversation = 'Jenny: "I know where your wallet is, but I\'m dying. I need water. Get me some and I\'ll tell you where your wallet is"'
+
+Dave.itemConvo = 'Dave: "Bleugh... you found my trousers... Here are yours... Send me the dry cleaning bill"'
+Greg.itemConvo = 'Greg: "A kebab! You beauty. Can\'t believe how hard it is to order a kebab at 7am. Here\'s your phone"'
+Jenny.itemConvo = 'Jenny: "Water! Precious giver of life! I didn\'t think I was going to make it. Here\'s your wallet"'
 
 // Create items
-const Phone = new Item("phone");
-const YourTrousers = new Item("your trousers");
-const Kebab = new Item("kebab");
-const Beer = new Item("beer");
-const Water = new Item("water");
-const Wallet = new Item("wallet");
+const Phone = new Item("Phone");
+const YourTrousers = new Item("Your Trousers");
+const Kebab = new Item("Kebab");
+const Beer = new Item("Beer");
+const Water = new Item("Water");
+const Wallet = new Item("Wallet");
 const DavesTrousers = new Item("Dave's trousers");
 
 // Assign items to characters
@@ -231,19 +253,74 @@ GuestBedroom.item = DavesTrousers
 const startPage = document.getElementById('start-page');
 const gamePage = document.getElementById('game-container');
 
+let currentRoom = {};
+let foundItems = []
+let archivedItems = []
+let archivedCharacters = []
+let health = 100;
+
 // Display room info
 function displayRoomInfo(room) {
-    if (room.character === "") {
-        textContent = `You are in the ${room.name}. ${room.description}.`
-    } else {
-        textContent = `You are in the ${room.name}. ${room.description}. ${room.character.name} is here. ${room.character.description}`
-    }
+  let textContent = ""
+  let bottomTextContent = ""
 
-    document.getElementById("text-area").innerHTML = textContent;
-    document.getElementById("usertext").focus();
+  if (room.character === "") {
+      textContent = `You are in the ${room.name}. ${room.description}.`
+  } else {
+      textContent = `You are in the ${room.name}. ${room.description}. ${room.character.name} is here. ${room.character.description}`
+      if (room.name === "bathroom" && foundItems.includes("Dave's trousers")) {
+        bottomTextContent = `${room.character.itemConvo}`
+        foundItems.push("Your Trousers")
+        const index = foundItems.indexOf("Dave's trousers")
+        if (index > -1) {
+          foundItems.splice(index, 1)
+        }
+        updateItemsList();
+      } 
+      else if (room.name === "living room" && foundItems.includes("Kebab")) {
+        bottomTextContent = `${room.character.itemConvo}`
+        foundItems.push("Phone")
+        const index = foundItems.indexOf("Kebab")
+        if (index > -1) {
+          foundItems.splice(index, 1)
+        }
+        updateItemsList();
+      }
+      else if (room.name === "master bedroom" && foundItems.includes("Water")) {
+        bottomTextContent = `${room.character.itemConvo}`
+        foundItems.push("Wallet")
+        const index = foundItems.indexOf("Water")
+        if (index > -1) {
+          foundItems.splice(index, 1)
+        }
+        updateItemsList();
+      }
+      else {
+        bottomTextContent = `${room.character.conversation}`
+      }
+  }
+
+  if (room.item !== "" && !archivedItems.includes(room.item.name)) {
+    const itemDescription = room.item.name;
+    textContent += `<br><br>${room.item.describe()}`;
+    foundItems.push(itemDescription);
+    archivedItems.push(itemDescription)
+    updateItemsList();
+  }
+
+  document.getElementById("text-area").innerHTML = textContent;
+  document.getElementById("actions").innerHTML = bottomTextContent;
+  document.getElementById("usertext").focus();
 }
 
-let currentRoom = {};
+function updateItemsList() {
+  const itemsListElement = document.getElementById("items-list")
+  itemsListElement.innerHTML = foundItems.join("<br>")
+
+if (foundItems.includes("Phone") && foundItems.includes("Wallet") && foundItems.includes("Your Trousers")) {
+  alert("YOU WON. Harry managed to call an Uber and made it home")
+}
+}
 
 // Start Game
 function startGame() {
@@ -254,33 +331,23 @@ function startGame() {
   document.addEventListener("keydown", function (event) {
     if (event.key === " ") {
       let textArea = document.getElementById("text-area");
+      let bottomTextArea = document.getElementById("actions")
       if (pageNumber === 1) {
-        textArea.innerHTML = '"God, where am I? I don\'t feel so good... I can\'t remember a thing from last night..."<br><br>"Hold on a second. Where\'s my phone? And my wallet. And... my trousers??"';
+        bottomTextArea.innerHTML = 'Harry: "God, where am I? I don\'t feel so good... I can\'t remember a thing from last night..."<br><br>"Hold on a second. Where\'s my phone? And my wallet. And... my trousers??"';
       } else if (pageNumber === 2) {
-        textArea.innerHTML = "The aim of the game is to search Dave's house and find Harry's phone, wallet and trousers before his hangover gets the better of him. Every time you take an action, Harry's health will drop.<br><br>To move, type a direction into the input box and hit Enter. To search a room for items, type Search.<br><br> Best of luck!";
+        textArea.innerHTML = "Harry needs to get home, but without his <u>phone</u>, <u>wallet</u> and <u>trousers</u> he can’t go anywhere. He thinks his friends will know where his stuff is. Will you help him find his friends and retrieve his items before his hangover gets the better of him? <br><br>Every time you move, Harry's health will drop. To move, type a direction into the input box and hit Enter.<br><br>Press SPACE to continue";
       } else if (pageNumber === 3) {
-        firstRoom()
+        displayRoomInfo(Kitchen);
       }
 
       pageNumber++;
     } else {
-        console.log("that is not a valid command please try again 2");
+        console.log("that is not a valid command please try again");
     }
   });
 }
 // 
 
-function firstRoom() {
-  displayRoomInfo(Kitchen)
-}
-
-// let itemBag = []
-
-// for (let i = 0; i < 7; i++) {
-//   document.getElementById("item" + String.i).innerHTML = itemBag[i]
-// }
-
-let health = 100;
 
 // Handle commands
 document.addEventListener("keydown", function (event) {
@@ -290,6 +357,9 @@ document.addEventListener("keydown", function (event) {
       if (directions.includes(command.toLowerCase())) {
         currentRoom = currentRoom.move(command)
         document.getElementById("usertext").value = ""
+        currentRoom.visits++;
+        console.log(currentRoom.name)
+        console.log(currentRoom.visits)
         displayRoomInfo(currentRoom);
         health -= 5
         document.getElementById("health-score").innerHTML = health
